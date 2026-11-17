@@ -1,0 +1,13 @@
+
+version: 2
+
+sources:
+  - name: t100
+    database: proj-windia-514501
+    schema: win_db
+    tables:
+      - name: raw_carrier_domestic_market
+      - name: carrier_group
+      - name: service_class_type
+      - name: distance_group_type
+      - name: region

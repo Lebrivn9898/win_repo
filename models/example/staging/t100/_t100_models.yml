@@ -1,0 +1,26 @@
+models:
+  - name: stg_t100__market
+    description: "T-100 Market, one row per carrier x origin x dest x service class x month" 
+    columns:
+      - name: month_start_date
+        data_tests:
+          - not_null
+      - name: passengers
+        data_tests:
+          - not_null
+      - name: freight_lbs
+        data_tests:
+          - not_null
+      - name: mail_lbs
+        data_tests:
+        - not_null
+      - name: service_class_type
+        data_tests:
+        - not_null
+        - accepted_values:
+            arguments: 
+              values: ['F', 'G', 'L', 'P']
+  - name: stg_t100__service_class
+    description: "Service group description by class"
+  - name: stg_t100__distance_group
+    description: "Distance range by group"

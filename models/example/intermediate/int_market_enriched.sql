@@ -11,7 +11,7 @@ with
 select
 market.*,
 sc.service_class_description,
-dg.distance_group_range
+dg.distance_group_description
 from {{ ref('stg_t100__market') }} market
 join service_class sc
     on sc.service_class = market.service_class

@@ -13,16 +13,16 @@ select
     stability.is_cv_eligible,
     growth.six_month_growth
 from {{ ref('int_scale_network_breadth') }} net_breadth
-join {{ ref('int_route_dependence') }} route_dep
+left join {{ ref('int_route_dependence') }} route_dep
     on route_dep.origin_airport_code = net_breadth.origin_airport_code
     and route_dep.carrier_name = net_breadth.carrier_name
-join {{ ref('int_top_route_share') }} top_route_sh
+left join {{ ref('int_top_route_share') }} top_route_sh
     on top_route_sh.origin_airport_code = net_breadth.origin_airport_code
     and top_route_sh.carrier_name = net_breadth.carrier_name
-join {{ ref('int_stability_tbl') }} stability
+left join {{ ref('int_stability_tbl') }} stability
     on stability.origin_airport_code = net_breadth.origin_airport_code
     and stability.carrier_name = net_breadth.carrier_name
-join {{ ref('int_growth_trailing_tbl') }} growth
+left join {{ ref('int_growth_trailing_tbl') }} growth
     on growth.origin_airport_code = net_breadth.origin_airport_code
     and growth.carrier_name = net_breadth.carrier_name
 

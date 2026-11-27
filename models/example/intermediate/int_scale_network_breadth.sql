@@ -2,9 +2,8 @@ SELECT
     ORIGIN_AIRPORT_CODE, 
     ORIGIN_CITY,
     CARRIER_NAME,
-    SUM(passengers) as total_passengers_by_carrier,
-    round(SUM(passengers) * 100 / (SUM(SUM(passengers)) OVER (PARTITION BY ORIGIN_AIRPORT_CODE)), 2) as carrier_passenger_share,
+    COALESCE(SUM(passengers), 0) as total_passengers_by_carrier,
+    COALESCE(ROUND(safe_divide((CAST(SUM(passengers) * 100 as BIGNUMERIC)), (CAST(SUM(SUM(passengers)) OVER (PARTITION BY ORIGIN_AIRPORT_CODE) AS BIGNUMERIC))), 2), 0) as carrier_passenger_share,
     count(DISTINCT DEST_AIRPORT_CODE) as cnt_distinct_dest
 FROM {{ ref('stg_t100__market') }}
-WHERE passengers > 0
 GROUP BY ORIGIN_AIRPORT_CODE, ORIGIN_CITY, CARRIER_NAME

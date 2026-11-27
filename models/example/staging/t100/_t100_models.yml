@@ -14,7 +14,7 @@ models:
       - name: mail_lbs
         data_tests:
         - not_null
-      - name: service_class_type
+      - name: service_class
         data_tests:
         - not_null
         - accepted_values:
@@ -24,3 +24,70 @@ models:
     description: "Service group description by class"
   - name: stg_t100__distance_group
     description: "Distance range by group"
+  - name: int_route_dependence
+    description: "Determine's the top passenger route and computes the passenger share of the top route across the carriers total passengers by airport"
+    columns:
+      - name: top_route_passenger_share
+        description: "Tests metric value share percentage is within expected range of 0 to 100"
+        data_tests:
+          - value_in_range:
+              arguments:
+                min_value: 0.0
+                max_value: 100.0
+                inclusive: true
+  - name: int_scale_network_breadth
+    description: "Carrier Passenger Share across all passengers by Airport"
+    columns:
+      - name: total_passengers_by_carrier
+        data_tests:
+          - not_null
+      - name: cnt_distinct_dest
+        data_tests:
+          - not_null
+          - value_in_range:
+              arguments:
+                min_value: 1
+                max_value: 10000
+                inclusive: true
+      - name: carrier_passenger_share
+        description: "Tests metric value share percentage is within expected range of 0 to 100"
+        data_tests:
+          - value_in_range:
+              arguments:
+                min_value: 0.0
+                max_value: 100.0
+                inclusive: true
+  - name: int_market_enriched
+    columns:
+      - name: service_class_sk
+        description: "Tests service class surrogate key relationship exists in parent table"
+        data_tests:
+          - relationships:
+              arguments: # available in v1.10.5 and higher. Older versions can set the <argument_name> as the top-level property.
+                to: ref('stg_t100__service_class')
+                field: service_class_sk
+      - name: distance_grp_sk
+        description: "Tests distance group surrogate key relationship exists in parent table"
+        data_tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_t100__distance_group')
+                field: distance_grp_sk
+  - name: top_route_share
+    columns:
+      - name: share_of_routes_ranked_first
+        description: "Tests metric value share percentage is within expected range of 0 to 100"
+        data_tests:
+          - value_in_range:
+              arguments: 
+                min_value: 0
+                max_value: 100
+                inclusive: true
+  - name: int_stability_tbl
+    columns:
+      - name: coeff_var
+        data_tests:
+          - not_null
+
+
+    

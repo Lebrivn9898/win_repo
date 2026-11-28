@@ -1,0 +1,14 @@
+unit_tests:
+  - name: test_service_class_mapping
+    description: "Validates service class is mapped corrected to service class description"
+    model: ex_int_market_enriched
+    given:
+      - input: ref('stg_t100__market')
+        rows:
+          - {origin_airport_code: 'BUR', carrier_name: 'United Air Lines Inc.', service_class: 'F'}
+    expect:
+      rows:
+        - {origin_airport_code: 'BUR', carrier_name: 'United Air Lines Inc.',
+          service_class: 'F', 
+          service_class_description: 'Scheduled Passenger/ Cargo Service F'
+          }

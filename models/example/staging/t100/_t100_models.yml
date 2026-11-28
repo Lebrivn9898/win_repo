@@ -73,7 +73,7 @@ models:
               arguments: 
                 to: ref('stg_t100__distance_group')
                 field: distance_grp_sk
-  - name: top_route_share
+  - name: int_top_route_share
     columns:
       - name: share_of_routes_ranked_first
         description: "Tests metric value share percentage is within expected range of 0 to 100"
@@ -83,6 +83,11 @@ models:
                 min_value: 0
                 max_value: 100
                 inclusive: true
+    description: "Assert that routes ranked first must be less than total routes"
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "routes_ranked_first <= total_routes"
   - name: int_stability_tbl
     columns:
       - name: coeff_var

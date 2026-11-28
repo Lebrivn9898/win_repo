@@ -15,7 +15,7 @@ SELECT
     CARRIER_NAME,
     COUNT(carrier_name) as routes_ranked_first,
     SUM(COUNT(DEST_AIRPORT_CODE)) OVER (PARTITION BY ORIGIN_AIRPORT_CODE) as total_routes,
-    ROUND(COUNT(carrier_name) * 100 / SUM(COUNT(DEST_AIRPORT_CODE)) OVER (PARTITION BY ORIGIN_AIRPORT_CODE), 2) as share_of_routes_ranked_first
+    COALESCE(ROUND(SAFE_DIVIDE(COUNT(carrier_name) * 100, SUM(COUNT(DEST_AIRPORT_CODE)) OVER (PARTITION BY ORIGIN_AIRPORT_CODE)), 2), 0) as share_of_routes_ranked_first
 FROM carrier_rank_by_route
 WHERE carrier_route_rank = 1
 GROUP BY ORIGIN_AIRPORT_CODE, CARRIER_NAME
